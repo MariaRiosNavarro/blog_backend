@@ -7,6 +7,11 @@ import {
   getAllArticle,
   deleteArticle,
 } from "./utils/filestorage.js";
+//!for files upload
+import fs from "fs/promises";
+import multer from "multer";
+import { v4 as uuidv4 } from "uuid";
+import { fileTypeFromBuffer } from "file-type";
 
 //config
 setup();
@@ -15,6 +20,12 @@ dotenv.config();
 
 const PORT = process.env.PORT;
 const app = express();
+
+//multer & co
+
+const storage = multer.memoryStorage();
+const DIR = "./upload";
+const upload = multer({ storage }); //* unsere uplaud nutzen in the POST rute unten
 
 //use
 
@@ -26,6 +37,10 @@ app.use(
   })
 );
 
+//multer uploads
+
+app.use("/upload", express.static("upload"));
+
 // Routes
 
 //  GET Route
@@ -36,13 +51,32 @@ app.get("/api/articles", (req, res) => {
     .catch(() => res.status(500).end());
 });
 
-//  POST Route
+//  POST Route + file upload
 
-app.post("/api/articles", (req, res) => {
+// app.post("/api/articles", (req, res) => {
+//   const article = req.body;
+//   console.log("Article :", article);
+//   saveArticle(article);
+//   res.end();
+// });
+
+//nutzen der methode .single("namederinput"), here ist "link" der name bei der imput wo diesen files gespeichert werden
+
+app.post("api/articles", upload.single("link"), (req, res) => {
   const article = req.body;
-  console.log("Article :", article);
-  saveArticle(article);
-  res.end();
+  console.log("Our File", req.file);
+  fileTypeFromBuffer(req.file.buffer)
+    .then((data) => {
+      const path = DIR + uuidv4() + "." + "data.ext";
+      fs.writeFile(path, req.file.buffer);
+      return path;
+    })
+    .then((data) => {
+      article.link = data;
+      console.log("Check Article", article);
+      saveArticle(article);
+      res.end();
+    });
 });
 
 //  Delete Route
