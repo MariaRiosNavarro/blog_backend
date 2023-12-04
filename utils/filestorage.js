@@ -21,7 +21,7 @@ export const saveArticle = (
   }
 ) => {
   article.id = uuidv4();
-  fs.writeFile("./storage/" + article.id, JSON.stringify(character));
+  fs.writeFile("./storage/" + article.id, JSON.stringify(article));
 };
 
 // !create one Array with all Articles
@@ -30,7 +30,7 @@ export const getAllArticle = () => {
   return fs.readdir("./storage").then((files) => {
     const array = [];
     for (const file of files) {
-      const data = fsystem.readFileSync("./storage");
+      const data = fsystem.readFileSync("./storage/" + file);
       const char = JSON.parse(data);
       array.push(char);
     }
