@@ -12,16 +12,16 @@ export const setup = () => {
 
 //!save a new Blog
 
-export const saveArticle = (
-  article = {
-    title: "title",
-    description: "description",
-    tags: [],
-    favorite: false,
-  }
-) => {
+export const saveArticle = (article) => {
   article.id = uuidv4();
-  fs.writeFile("./storage/" + article.id, JSON.stringify(article));
+  const filePath = "./storage/" + article.id;
+  fs.writeFile(filePath, JSON.stringify(article), (err) => {
+    if (err) {
+      console.error("Error saving article:", err);
+    } else {
+      console.log("Article saved successfully:", filePath);
+    }
+  });
 };
 
 // !create one Array with all Articles

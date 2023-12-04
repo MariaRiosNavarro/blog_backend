@@ -24,7 +24,7 @@ const app = express();
 //multer & co
 
 const storage = multer.memoryStorage();
-const DIR = "./upload";
+const DIR = "./uploads/";
 const upload = multer({ storage }); //* unsere uplaud nutzen in the POST rute unten
 
 //use
@@ -81,7 +81,39 @@ app.get("/api/articles", (req, res) => {
 //     });
 // });
 
+// app.post("/api/articles", upload.single("link"), (req, res) => {
+//   console.log("Our File", req.file);
+
+//   fileTypeFromBuffer(req.file.buffer)
+//     .then((data) => {
+//       const path = DIR + uuidv4() + "." + data.ext;
+//       fs.writeFile(path, req.file.buffer);
+//       console.log("-------------path", path);
+
+//       return path;
+//     })
+//     .then((data) => {
+//       article.link = data;
+//       console.log("-------------path", article);
+//       saveArticle(article);
+//       res.end();
+//     })
+//     .catch((error) => {
+//       console.error("Error processing file:", error);
+//       res.status(500).json({ error: "Internal Server Error" });
+//     });
+// });
+
 app.post("/api/articles", upload.single("link"), (req, res) => {
+  const article = {
+    // Define the article variable here
+    title: req.body.title,
+    description: req.body.description,
+    tags: req.body.tags || [], // Make sure it's an array
+    favorite: req.body.favorite || false,
+    // Add any other properties you need
+  };
+
   console.log("Our File", req.file);
 
   fileTypeFromBuffer(req.file.buffer)
@@ -94,7 +126,7 @@ app.post("/api/articles", upload.single("link"), (req, res) => {
     })
     .then((data) => {
       article.link = data;
-      console.log("-------------path", article);
+      console.log("-------------article", article);
       saveArticle(article);
       res.end();
     })
