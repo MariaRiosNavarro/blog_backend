@@ -9,6 +9,7 @@ import {
 } from "./utils/filestorage.js";
 
 //config
+setup();
 
 dotenv.config();
 

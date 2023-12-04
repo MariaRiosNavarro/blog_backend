@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from "uuid";
 export const setup = () => {
   fs.access("./storage/")
     .then(() => console.log("Storage Folder allready exist"))
-    .catch(() => fs.mkdir("/storage"));
+    .catch(() => fs.mkdir("./storage"));
 };
 
 //!save a new Blog
