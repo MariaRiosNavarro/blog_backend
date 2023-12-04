@@ -31,19 +31,21 @@ const upload = multer({ storage }); //* unsere uplaud nutzen in the POST rute un
 
 app.use(express.json());
 
-app.use(
-  cors({
-    origin: process.env.CORS_ORIGIN,
-  })
-);
+// app.use(
+//   cors({
+//     origin: process.env.CORS_ORIGIN,
+//   })
+// );
+
+app.use(cors());
 
 //multer uploads
 
-app.use("/upload", express.static("upload"));
+app.use("/uploads", express.static("uploads"));
 
 // Routes
 
-//  GET Route
+// ! GET Route
 
 app.get("/api/articles", (req, res) => {
   getAllArticle()
@@ -51,7 +53,7 @@ app.get("/api/articles", (req, res) => {
     .catch(() => res.status(500).end());
 });
 
-//  POST Route + file upload
+// ! POST ONE - Route + file upload
 
 // app.post("/api/articles", (req, res) => {
 //   const article = req.body;
@@ -62,20 +64,43 @@ app.get("/api/articles", (req, res) => {
 
 //nutzen der methode .single("namederinput"), here ist "link" der name bei der imput wo diesen files gespeichert werden
 
-app.post("api/articles", upload.single("link"), (req, res) => {
-  const article = req.body;
+// app.post("/api/articles", upload.single("link"), (req, res) => {
+//   // const article = req.body;
+//   console.log("Our File", req.file);
+//   fileTypeFromBuffer(req.file.buffer)
+//     .then((data) => {
+//       const path = DIR + uuidv4() + "." + "data.ext";
+//       fs.writeFile(path, req.file.buffer);
+//       return path;
+//     })
+//     .then((data) => {
+//       article.link = data;
+//       console.log("Check Article", article);
+//       saveArticle(article);
+//       res.end();
+//     });
+// });
+
+app.post("/api/articles", upload.single("link"), (req, res) => {
   console.log("Our File", req.file);
+
   fileTypeFromBuffer(req.file.buffer)
     .then((data) => {
-      const path = DIR + uuidv4() + "." + "data.ext";
+      const path = DIR + uuidv4() + "." + data.ext;
       fs.writeFile(path, req.file.buffer);
+      console.log("-------------path", path);
+
       return path;
     })
     .then((data) => {
       article.link = data;
-      console.log("Check Article", article);
+      console.log("-------------path", article);
       saveArticle(article);
       res.end();
+    })
+    .catch((error) => {
+      console.error("Error processing file:", error);
+      res.status(500).json({ error: "Internal Server Error" });
     });
 });
 
