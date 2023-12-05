@@ -48,12 +48,11 @@ DATABASE_PASSWORD=yourPassword
 
 # import all in your files, for example:
 
-````
+```
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 
 ```
 
-DONT FORGET! imports of files need the file end, for example: "./utils/filestorage.js";
-````
+- DONT FORGET! imports of files need the file end, for example: "./utils/filestorage.js";
