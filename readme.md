@@ -32,7 +32,7 @@ node_modules/
 .vscode/
 .env
 storage/
-upload/
+uploads/
 
 
 ```
