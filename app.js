@@ -55,63 +55,12 @@ app.get("/api/articles", (req, res) => {
 
 // ! POST ONE - Route + file upload
 
-// app.post("/api/articles", (req, res) => {
-//   const article = req.body;
-//   console.log("Article :", article);
-//   saveArticle(article);
-//   res.end();
-// });
-
-//nutzen der methode .single("namederinput"), here ist "link" der name bei der imput wo diesen files gespeichert werden
-
-// app.post("/api/articles", upload.single("link"), (req, res) => {
-//   // const article = req.body;
-//   console.log("Our File", req.file);
-//   fileTypeFromBuffer(req.file.buffer)
-//     .then((data) => {
-//       const path = DIR + uuidv4() + "." + "data.ext";
-//       fs.writeFile(path, req.file.buffer);
-//       return path;
-//     })
-//     .then((data) => {
-//       article.link = data;
-//       console.log("Check Article", article);
-//       saveArticle(article);
-//       res.end();
-//     });
-// });
-
-// app.post("/api/articles", upload.single("link"), (req, res) => {
-//   console.log("Our File", req.file);
-
-//   fileTypeFromBuffer(req.file.buffer)
-//     .then((data) => {
-//       const path = DIR + uuidv4() + "." + data.ext;
-//       fs.writeFile(path, req.file.buffer);
-//       console.log("-------------path", path);
-
-//       return path;
-//     })
-//     .then((data) => {
-//       article.link = data;
-//       console.log("-------------path", article);
-//       saveArticle(article);
-//       res.end();
-//     })
-//     .catch((error) => {
-//       console.error("Error processing file:", error);
-//       res.status(500).json({ error: "Internal Server Error" });
-//     });
-// });
-
 app.post("/api/articles", upload.single("link"), (req, res) => {
   const article = {
-    // Define the article variable here
     title: req.body.title,
     description: req.body.description,
-    tags: req.body.tags || [], // Make sure it's an array
+    tags: req.body.tags || [],
     favorite: req.body.favorite || false,
-    // Add any other properties you need
   };
 
   console.log("Our File", req.file);
@@ -121,7 +70,6 @@ app.post("/api/articles", upload.single("link"), (req, res) => {
       const path = DIR + uuidv4() + "." + data.ext;
       fs.writeFile(path, req.file.buffer);
       console.log("-------------path", path);
-
       return path;
     })
     .then((data) => {
