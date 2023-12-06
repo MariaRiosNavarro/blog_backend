@@ -55,11 +55,11 @@ export const deleteArticle = (id) => {
 };
 
 export function editArticle(updated_article) {
-  return getCharacter(updated_article.id)
+  return getOneArticle(updated_article.id)
     .then(
       (old_article) => (old_article = { ...old_article, ...updated_article })
     )
     .then((newArticle) =>
-      fs.writeFile("./" + DB + "/" + newArticle.id, JSON.stringify(newArticle))
+      fs.writeFile("./storage/" + newArticle.id, JSON.stringify(newArticle))
     );
 }

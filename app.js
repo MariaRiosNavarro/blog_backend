@@ -85,17 +85,19 @@ app.post("/api/articles", upload.single("link"), (req, res) => {
     });
 });
 
-//  Delete Route
+//  !Delete Route
 
-app.delete("api/articles", (req, res) => {
+app.delete("/api/articles", (req, res) => {
   const id = req.body.id;
+  console.log("---------------👉", id);
   deleteArticle(id)
+    .then(() => res.json({ message: "Article deleted successfully!" }))
     .then(() => res.end())
     .catch((err) => res.status(500).end(err));
 });
 
-app.put("api/articles", upload.none(), (req, res) => {
-  console.log(req.body);
+app.put("/api/articles", upload.none(), (req, res) => {
+  console.log("---------------👉", req.body);
   editArticle(req.body)
     .then(() => res.end())
     .catch((err) => {
