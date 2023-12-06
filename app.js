@@ -6,6 +6,7 @@ import {
   saveArticle,
   getAllArticle,
   deleteArticle,
+  editArticle,
 } from "./utils/filestorage.js";
 //!for files upload
 import fs from "fs/promises";
@@ -91,6 +92,16 @@ app.delete("api/articles", (req, res) => {
   deleteArticle(id)
     .then(() => res.end())
     .catch((err) => res.status(500).end(err));
+});
+
+app.put("api/articles", upload.none(), (req, res) => {
+  console.log(req.body);
+  editArticle(req.body)
+    .then(() => res.end())
+    .catch((err) => {
+      console.log(err);
+      res.status(500).end("Error Message");
+    });
 });
 
 // Listen
